@@ -1,0 +1,71 @@
+<html>
+<body>
+
+        {% include "company/header.html" %}
+<h1 class="text-center"> All Employees </h1>
+<a href="{% url 'new_employee' %}" class="btn btn-primary">New Employee<span class="glyphicon glyphicon-plus"></span></a>
+</br>
+</br>
+<div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                  <th class="header"> Code <i class="icon-sort"></i></th>
+                  <th class="header"> Name <i class="icon-sort"></i></th>
+                  <th class="header"> Gender <i class="icon-sort"></i></th>  
+                  <th class="header"> Date of birth <i class="icon-sort"></i></th> 
+                  <th class="header"> Department <i class="icon-sort"></i></th>                                                   
+                  <th class="header"> Actions <i class="icon-sort"></i></th>                  
+              
+                </tr>
+            </thead>
+            <tbody>
+            
+            {% for key in employees %}
+                <tr id="{{ key.id }}">
+                    <td>{{ key.code }}</td>
+                    <td>{{ key.name }}</td>
+                    <td>{{ key.gender}}</td>
+                    <td>{{ key.date_of_birth }}</td>  
+                    <td>{{ key.dep_id }}</td>                                      
+                    
+                    <td><a class="btn btn-default" href="{% url 'emp_edit' key.id  %}">Edit<span class="glyphicon glyphicon-pencil"></span></a>
+                    
+                    <a class="btn btn-default delete" value="{{key.id}}">Delete<span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            
+            </tbody>
+            </table>
+        </div>
+                
+                <a href="{% url 'employee_list' %}">All</a></br>
+                {% for key in departments %}
+                <a href="{% url 'emp_by_dep' key.id  %}">{{key.name}}</a> </br>
+            {% endfor %}
+                
+              
+              
+    </div>
+</body>
+<script>
+    $(".delete").click(function () {
+     
+      emp_id=$(this).attr('value');
+       tr = $(this).closest('tr');
+      
+      
+    $.ajax({
+    url: '/comapny/employee/',
+    data: {pk: emp_id },
+    dataType: 'json',
+    success: function() {
+        $(tr).remove();
+        alert('Employee deleted!')
+    }
+});
+});
+</script>
+</html>
